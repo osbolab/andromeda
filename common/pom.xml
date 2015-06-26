@@ -9,30 +9,15 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Andromeda Server</name>
-  <artifactId>andromeda-server</artifactId>
+  <name>Andromeda Commons</name>
+  <artifactId>andromeda-common</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>com.andromeda</groupId>
-      <artifactId>andromeda-common</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-
     <!-- Networking -->
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
     </dependency>
-
-    <!-- Logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-    </dependency>
   </dependencies>
+
 </project>

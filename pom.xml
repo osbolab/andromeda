@@ -13,10 +13,18 @@
   <modules>
     <module>server</module>
     <module>client</module>
+    <module>common</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
+      <!-- Netty Networking -->
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-all</artifactId>
+        <version>5.0.0.Alpha2</version>
+      </dependency>
+
       <!-- Logging -->
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -33,6 +41,7 @@
 
   <build>
     <plugins>
+      <!-- Set Java versions -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

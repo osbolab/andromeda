@@ -1,25 +1,23 @@
 package com.andromeda.server;
 
-import com.andromeda.procedural.Rng;
-import com.andromeda.procedural.Rngs;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main {
-  public static final Logger log = LoggerFactory.getLogger(Main.class);
+  public static void main(String[] args) throws Exception {
+    int port = 0;
+    if (args.length > 0) {
+      try {
+        port = Integer.parseInt(args[0]);
+      } catch (NumberFormatException ignored) {}
+    }
 
-  public static void main(String[] args) {
-    Rng rng = Rngs.fast();
-    rng.longs(10)
-       .forEach(i -> System.out.print(i + ", "));
+    if (port <= 0)
+      port = 9999;
 
-    Rng rng2 = rng.clone();
-
-    System.out.println();
-    System.out.println("Cloned:");
-    rng.doubles(10).forEach(i -> System.out.print(i + ", "));
-    System.out.println();
-    rng2.doubles(10).forEach(i -> System.out.print(i + ", "));
+    log.info("accepting clients on port {}", port);
+    new Server(port).start();
   }
+
+  private static final Logger log = LoggerFactory.getLogger(Main.class);
 }
