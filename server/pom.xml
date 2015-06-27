@@ -24,5 +24,12 @@
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
     </dependency>
+
+    <!-- MongoDB -->
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver</artifactId>
+      <version>3.0.2</version>
+    </dependency>
   </dependencies>
 </project>
