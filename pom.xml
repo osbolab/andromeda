@@ -14,7 +14,34 @@
     <module>server</module>
     <module>client</module>
     <module>common</module>
+    <module>glclient</module>
   </modules>
+
+  <properties>
+    <protobuf.version>2.6.1</protobuf.version>
+    <protobuf.plugin.version>2.6.1.4</protobuf.plugin.version>
+  </properties>
+
+  <dependencies>
+    <!-- JSR-305 annotations (@Nullable) -->
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.12</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.12</version>
+    </dependency>
+  </dependencies>
 
   <dependencyManagement>
     <dependencies>
@@ -25,23 +52,18 @@
         <version>5.0.0.Alpha2</version>
       </dependency>
 
-      <!-- Logging -->
+      <!-- Protobuf Network Messages -->
       <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.7.12</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>1.7.12</version>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+        <version>${protobuf.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <build>
     <plugins>
-      <!-- Set Java versions -->
+      <!-- Set Java version for all modules-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -52,6 +74,33 @@
         </configuration>
       </plugin>
     </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <!-- Compile protocol buffers automatically -->
+        <plugin>
+          <groupId>com.github.os72</groupId>
+          <artifactId>protoc-jar-maven-plugin</artifactId>
+          <version>${protobuf.plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>run</goal>
+              </goals>
+              <configuration>
+                <includeDirectories>
+                  <include>src/main/protobuf</include>
+                </includeDirectories>
+                <inputDirectories>
+                  <include>src/main/protobuf</include>
+                </inputDirectories>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
 </project>

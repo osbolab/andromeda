@@ -9,20 +9,16 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Andromeda Client</name>
-  <artifactId>andromeda-client</artifactId>
+  <name>Andromeda GL Client</name>
+  <artifactId>andromeda-glclient</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>com.andromeda</groupId>
-      <artifactId>andromeda-common</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-
-    <!-- Networking -->
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-all</artifactId>
+      <groupId>org.lwjgl.lwjgl</groupId>
+      <artifactId>lwjgl</artifactId>
+      <version>3.0.0a-r49</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/lwjgl/lwjgl-3.0.0a-r49.jar</systemPath>
     </dependency>
   </dependencies>
 

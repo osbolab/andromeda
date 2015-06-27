@@ -18,6 +18,22 @@
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
     </dependency>
+
+    <!-- Protobuf Network Messages -->
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Compile protocol buffers automatically -->
+      <plugin>
+        <groupId>com.github.os72</groupId>
+        <artifactId>protoc-jar-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

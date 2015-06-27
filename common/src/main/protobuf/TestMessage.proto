@@ -1,0 +1,6 @@
+option java_package = "com.andromeda.net";
+option java_outer_classname = "Messages";
+
+message TestMessage {
+  required string message = 1;
+}
