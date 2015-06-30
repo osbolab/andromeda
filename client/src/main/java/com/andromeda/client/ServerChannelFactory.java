@@ -1,4 +1,4 @@
-package com.andromeda.server;
+package com.andromeda.client;
 
 import com.andromeda.net.Messages.TestMessage;
 
@@ -9,16 +9,16 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-class ServerInitializer extends ChannelInitializer<SocketChannel> {
+public class ServerChannelFactory extends ChannelInitializer<SocketChannel> {
   @Override
   protected void initChannel(SocketChannel ch) throws Exception {
     ch.pipeline()
-      .addLast("frameDecoder", new ProtobufVarint32FrameDecoder())
-      .addLast("protobufDecoder", new ProtobufDecoder(TestMessage.getDefaultInstance()))
+        .addLast("frameDecoder", new ProtobufVarint32FrameDecoder())
+        .addLast("protobufDecoder", new ProtobufDecoder(TestMessage.getDefaultInstance()))
 
-      .addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender())
-      .addLast("protobufEncoder", new ProtobufEncoder())
+        .addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender())
+        .addLast("protobufEncoder", new ProtobufEncoder())
 
-      .addLast(new ServerWorker());
+        .addLast(new ServerChannelWorker());
   }
 }

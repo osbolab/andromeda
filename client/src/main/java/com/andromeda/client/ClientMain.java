@@ -6,11 +6,9 @@ import com.typesafe.config.ConfigFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.InetSocketAddress;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -20,34 +18,28 @@ public class ClientMain {
   public static void main(String[] args) throws Exception {
     final Config clientConf = ConfigFactory.load().getConfig("andromeda.client");
 
-    final RemoteEndpoint server = RemoteEndpoint.configure(clientConf.getConfig("connect"));
+    final InetSocketAddress serverAddress = new InetSocketAddress(
+        clientConf.getString("connect.address"),
+        clientConf.getInt("connect.port")
+    );
 
-    log.info("connecting to {}", server);
-
-    EventLoopGroup workerGroup = new NioEventLoopGroup();
-
+    EventLoopGroup workerGroup = new NioEventLoopGroup(1);
     try {
-      List<ChannelFuture> futures = new ArrayList<>();
+      Bootstrap client = new Bootstrap()
+          .group(workerGroup)
+          .channel(NioSocketChannel.class)
+          .option(ChannelOption.SO_KEEPALIVE, true)
+          .handler(new ServerChannelFactory());
 
-      // Start all clients connecting
-      for (int i = 0; i < 100; ++i) {
-        Bootstrap client = new Bootstrap()
-            .group(workerGroup)
-            .channel(NioSocketChannel.class)
-            .option(ChannelOption.SO_KEEPALIVE, true)
-            .handler(new ClientInitializer(server));
+      log.info("connecting to {}:{}", serverAddress.getHostName(), serverAddress.getPort());
 
-        futures.add(client.connect(server.getAddress()));
-      }
+      client.connect(serverAddress).sync()
+          .channel().closeFuture().sync();
 
-      // Wait for a client to connect, then wait for it to close.
-      futures.forEach(connecting ->
-                          connecting.syncUninterruptibly()
-                              .channel()
-                              .closeFuture().syncUninterruptibly()
-      );
+      log.info("disconnected");
 
     } finally {
+      log.debug("stopping connection pool");
       workerGroup.shutdownGracefully();
     }
   }

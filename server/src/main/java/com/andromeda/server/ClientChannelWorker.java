@@ -9,7 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.ssl.SslHandler;
 
-final class ServerWorker extends SimpleChannelInboundHandler<TestMessage> {
+final class ClientChannelWorker extends SimpleChannelInboundHandler<TestMessage> {
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
     SslHandler sslCtx = ctx.pipeline().get(SslHandler.class);
@@ -47,5 +47,5 @@ final class ServerWorker extends SimpleChannelInboundHandler<TestMessage> {
     ctx.writeAndFlush(msg.build());
   }
 
-  private static final Logger log = LoggerFactory.getLogger(ServerWorker.class);
+  private static final Logger log = LoggerFactory.getLogger(ClientChannelWorker.class);
 }

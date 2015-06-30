@@ -9,7 +9,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-final class ClientWorker extends SimpleChannelInboundHandler<TestMessage> {
+final class ServerChannelWorker extends SimpleChannelInboundHandler<TestMessage> {
   @Override
   protected void messageReceived(ChannelHandlerContext ctx, TestMessage msg) throws Exception {
     log.info(msg.getMessage());
@@ -26,5 +26,5 @@ final class ClientWorker extends SimpleChannelInboundHandler<TestMessage> {
     ctx.close();
   }
 
-  private static final Logger log = LoggerFactory.getLogger(ClientWorker.class);
+  private static final Logger log = LoggerFactory.getLogger(ServerChannelWorker.class);
 }
