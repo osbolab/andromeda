@@ -22,7 +22,7 @@ class ServerInitializer extends ChannelInitializer<SocketChannel> {
   protected void initChannel(SocketChannel ch) throws Exception {
     ChannelPipeline pipeline = ch.pipeline();
     if (sslCtx != null)
-      pipeline.addLast("ssl", sslCtx.newHandler(ch.alloc()));
+      pipeline.addLast("useSsl", sslCtx.newHandler(ch.alloc()));
 
     pipeline
       .addLast("frameDecoder", new ProtobufVarint32FrameDecoder())

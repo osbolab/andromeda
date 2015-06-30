@@ -45,6 +45,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- HOCON Configuration -->
+      <dependency>
+        <groupId>com.typesafe</groupId>
+        <artifactId>config</artifactId>
+        <version>1.3.0</version>
+      </dependency>
+
       <!-- Netty Networking -->
       <dependency>
         <groupId>io.netty</groupId>

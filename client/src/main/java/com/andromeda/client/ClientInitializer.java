@@ -4,8 +4,7 @@ import com.andromeda.net.Messages.TestMessage;
 
 import java.net.InetSocketAddress;
 
-import javax.annotation.Nullable;
-
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -16,16 +15,22 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.ssl.SslContext;
 
 public class ClientInitializer extends ChannelInitializer<SocketChannel> {
-  public ClientInitializer(@Nullable SslContext sslCtx, InetSocketAddress host) {
-    this.sslCtx = sslCtx;
-    this.host = host;
+  public ClientInitializer(RemoteEndpoint server) {
+    this.server = server;
   }
 
   @Override
   protected void initChannel(SocketChannel ch) throws Exception {
     ChannelPipeline pipeline = ch.pipeline();
-    if (sslCtx != null)
-      pipeline.addLast("ssl", sslCtx.newHandler(ch.alloc(), host.getHostName(), host.getPort()));
+
+    final SslContext sslCtx = server.getSslContext();
+    if (sslCtx != null) {
+      final InetSocketAddress host = server.getAddress();
+      final ChannelHandler sslHandler = sslCtx.newHandler(ch.alloc(),
+                                                          host.getHostName(),
+                                                          host.getPort());
+      pipeline.addLast("ssl", sslHandler);
+    }
 
     pipeline
         .addLast("frameDecoder", new ProtobufVarint32FrameDecoder())
@@ -37,6 +42,5 @@ public class ClientInitializer extends ChannelInitializer<SocketChannel> {
         .addLast(new ClientWorker());
   }
 
-  private final SslContext sslCtx;
-  private final InetSocketAddress host;
+  private final RemoteEndpoint server;
 }

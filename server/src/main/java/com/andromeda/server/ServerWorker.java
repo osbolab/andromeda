@@ -5,8 +5,6 @@ import com.andromeda.net.Messages.TestMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.ssl.SslHandler;
@@ -14,25 +12,21 @@ import io.netty.handler.ssl.SslHandler;
 final class ServerWorker extends SimpleChannelInboundHandler<TestMessage> {
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
-    ctx.pipeline()
-       .get(SslHandler.class)
-       .handshakeFuture()
-       .addListener(future -> {
-         log.info(ctx.pipeline().get(SslHandler.class).engine().getSession().getCipherSuite());
+    SslHandler sslCtx = ctx.pipeline().get(SslHandler.class);
+    if (sslCtx != null) {
+      sslCtx.handshakeFuture()
+          .addListener(f -> {
+            log.info(sslCtx.engine().getSession().getCipherSuite());
+            onConnected(ctx);
+          });
+    } else {
+      onConnected(ctx);
+    }
+  }
 
-         TestMessage.Builder builder = TestMessage.newBuilder();
-         builder.setMessage("A N D R O M E D A");
-
-         final ChannelFuture f = ctx.writeAndFlush(builder.build());
-         // Write is asynchronous, so wait for it to finish before closing
-         f.addListener(new ChannelFutureListener() {
-           @Override
-           public void operationComplete(ChannelFuture future) throws Exception {
-             assert f == future;
-             ctx.close();
-           }
-         });
-       });
+  @Override
+  public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    ctx.flush();
   }
 
   @Override
@@ -44,6 +38,13 @@ final class ServerWorker extends SimpleChannelInboundHandler<TestMessage> {
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     log.error("exception handling client channel", cause);
     ctx.close();
+  }
+
+  private void onConnected(ChannelHandlerContext ctx) {
+    TestMessage.Builder msg = TestMessage.newBuilder();
+    msg.setMessage("A N D R O M E D A");
+
+    ctx.writeAndFlush(msg.build());
   }
 
   private static final Logger log = LoggerFactory.getLogger(ServerWorker.class);
