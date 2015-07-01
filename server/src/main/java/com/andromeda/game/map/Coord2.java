@@ -1,4 +1,4 @@
-package com.andromeda.map;
+package com.andromeda.game.map;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;

@@ -1,4 +1,4 @@
-package com.andromeda.map;
+package com.andromeda.game.map;
 
 public interface MapLayout {
   int getMaxTileCount();

@@ -1,4 +1,4 @@
-package com.andromeda.map;
+package com.andromeda.game.map;
 
 public final class Direction {
   public static final int SW = 0;

@@ -1,4 +1,4 @@
-package com.andromeda.map;
+package com.andromeda.game.map;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;

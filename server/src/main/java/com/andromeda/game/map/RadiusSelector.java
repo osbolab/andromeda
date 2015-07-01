@@ -1,4 +1,4 @@
-package com.andromeda.map;
+package com.andromeda.game.map;
 
 import java.util.Objects;
 import java.util.Spliterators;
@@ -57,7 +57,6 @@ final class RadiusSelector<T> implements Tiles<T> {
   private final class RadiusSpliterator extends Spliterators.AbstractSpliterator<Tile<T>> {
     private RadiusSpliterator() {
       super(Long.MAX_VALUE, 0);
-
       row = -radius;
       row_max = radius;
       resetColumn();
@@ -72,9 +71,7 @@ final class RadiusSelector<T> implements Tiles<T> {
           return false;
         resetColumn();
       }
-
       action.accept(new Tile<>(map, originX + row, originY + col++));
-
       return true;
     }
 

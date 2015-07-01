@@ -1,4 +1,4 @@
-package com.andromeda.map;
+package com.andromeda.game.map;
 
 public final class Tile<T> {
   Tile(TileMap<T> map, int x, int y) {
