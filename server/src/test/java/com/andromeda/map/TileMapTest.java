@@ -11,8 +11,30 @@ import static org.junit.Assert.assertEquals;
 
 public class TileMapTest {
   @Test
+  public void selectRing() {
+    final int[] xs = { 1, 2, 2, 1, 0, 0 };
+    final int[] ys = { 0, 0, 1, 2, 2, 1 };
+
+    TileMap<Object> map = new TileMap<>(new HexMapLayout(7));
+    List<Tile<Object>> tiles = map.select
+        .ring(1, -1, 1)
+        .stream()
+        .collect(Collectors.toList());
+
+    map.neighbor(0, 0, 1);
+
+    assertEquals(6, tiles.size());
+
+    for (int i = 0; i < tiles.size(); ++i) {
+      final Tile<Object> tile = tiles.get(i);
+      assertEquals(xs[i], tile.x);
+      assertEquals(ys[i], tile.y);
+    }
+  }
+
+  @Test
   public void selectRadius() {
-    TileMap<Integer> map = new TileMap<>(new HexagonalMapLayout(7));
+    TileMap<Integer> map = new TileMap<>(new HexMapLayout(7));
     List<Integer> tiles = map.select
         .radius(0, 0, 1)
         .stream()
@@ -38,13 +60,12 @@ public class TileMapTest {
 
   @Test
   public void setAndGetSelection() {
-    TileMap<Object> map = new TileMap<>(new HexagonalMapLayout(9));
+    TileMap<Object> map = new TileMap<>(new HexMapLayout(9));
 
     Set<Object> values = new HashSet<>();
 
     map.select
         .radius(0, 0, 1)
-        .stream()
         .forEach(tile -> {
           Object o = new Object();
           tile.set(o);
@@ -71,7 +92,7 @@ public class TileMapTest {
 
   @Test
   public void setAndGetTiles() {
-    TileMap<Object> map = new TileMap<>(new HexagonalMapLayout(9));
+    TileMap<Object> map = new TileMap<>(new HexMapLayout(9));
     for (int x = -2; x <= 2; ++x) {
       for (int y = -2; y <= 2; ++y) {
         final Object o = new Object();

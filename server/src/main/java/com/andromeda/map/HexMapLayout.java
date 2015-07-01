@@ -4,21 +4,21 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
 
-public class HexagonalMapLayout implements MapLayout {
-  public HexagonalMapLayout(int diameter) {
+public final class HexMapLayout implements MapLayout {
+  public HexMapLayout(int diameter) {
     if (diameter <= 0)
       throw new IllegalArgumentException("Map diameter must be positive");
     if ((diameter & 1) == 0)
       throw new IllegalArgumentException("Hexagonal map diameter must be odd");
 
     this.diameter = diameter;
-    // Cache for repeated divisions
+    // Cache for frequent divisions
     diameterInv = 1.0f / diameter;
-    radius = round(diameter / 2.0f);
+    radius = diameter / 2;
     // The edge length is equal to the radius including the center tile.
-    maxEdgeLength = radius;
+    maxEdgeLength = 1 + radius;
     // Sum the perimeters of the hexes with radii 1..R and add the center tile.
-    maxTileCount = 1 + 3 * radius * radius - 3 * radius;
+    maxTileCount = 1 + 3 * radius * radius + 3 * radius;
   }
 
   @Override
@@ -33,8 +33,8 @@ public class HexagonalMapLayout implements MapLayout {
 
   @Override
   public boolean contains(int x, int y) {
-    return max(abs(x), abs(y)) < radius
-           && abs(-x - y) < radius;
+    return max(abs(x), abs(y)) <= radius
+           && abs(-x - y) <= radius;
   }
 
   @Override

@@ -3,7 +3,7 @@ package com.andromeda.map;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileMap<T> {
+public final class TileMap<T> {
   public TileMap(MapLayout layout) {
     this.layout = layout;
     map = new HashMap<>(layout.getMaxTileCount());
@@ -13,13 +13,9 @@ public class TileMap<T> {
     return new Tile<>(this, x, y);
   }
 
-  public T remove(int x, int y) {
-    return map.remove(layout.indexOf(x, y));
-  }
-
-  public Tile<T> at(int x, int y, int neighbor) {
-    final Coord2 direction = directions[neighbor];
-    return at(x + direction.x, y + direction.y);
+  public Tile<T> neighbor(int x, int y, int direction) {
+    final Coord2 dir = Direction.coords[direction];
+    return at(x + dir.x, y + dir.y);
   }
 
   MapLayout getLayout() {
@@ -38,14 +34,10 @@ public class TileMap<T> {
     return map.remove(index);
   }
 
-  private static final Coord2[] directions = new Coord2[]{
-      new Coord2(1, 0), new Coord2(0, 1), new Coord2(-1, 1),
-      new Coord2(-1, 0), new Coord2(0, -1), new Coord2(1, -1)
-  };
   private final MapLayout layout;
   private final Map<Integer, T> map;
 
-  public final TileSelector<T> select = new TileSelector<T>() {
+  public final TileSelectors<T> select = new TileSelectors<T>() {
     @Override
     public Tiles<T> radius(int x, int y, int radius) {
       return new RadiusSelector<>(TileMap.this, x, y, radius);

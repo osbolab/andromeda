@@ -25,7 +25,25 @@ public final class Tile<T> {
   }
 
   public Tile<T> getNeighbor(int direction) {
-    return map.at(x, y, direction);
+    return map.neighbor(x, y, direction);
+  }
+
+  @Override
+  public String toString() {
+    return "(" + x + ", " + y + ")";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Tile<?> tile = (Tile<?>) o;
+    return index == tile.index && map.equals(tile.map);
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 * map.hashCode() + index;
   }
 
   private final TileMap<T> map;
