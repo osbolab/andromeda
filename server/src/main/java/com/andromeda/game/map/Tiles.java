@@ -1,12 +1,10 @@
 package com.andromeda.game.map;
 
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public interface Tiles<T> {
-  Stream<Tile<T>> stream();
 
-  void forEach(Consumer<? super Tile<T>> action);
+public interface Tiles<T>  extends Iterable<Tile<T>> {
+  Stream<Tile<T>> stream();
 
   Tile<T>[] toArray();
 }

@@ -1,47 +1,56 @@
 package com.andromeda.game.map;
 
-import java.util.Objects;
-import java.util.Spliterators;
-import java.util.function.Consumer;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 
 final class RadiusSelector<T> implements Tiles<T> {
   RadiusSelector(TileMap<T> map, int x, int y, int radius) {
-    assert radius >= 0;
-    assert map.getLayout().contains(x, y);
-
     this.map = map;
+    layout = map.getLayout();
+
+    assert radius >= 0;
+    assert layout.contains(x, y);
+
     originX = x;
     originY = y;
     this.radius = radius;
+    allOnMap = layout.containsRadius(x, y, radius);
   }
 
   @Override
   public Stream<Tile<T>> stream() {
     if (radius > 0)
-      return StreamSupport.stream(new RadiusSpliterator(), false);
+      return StreamSupport.stream(spliterator(), false);
     else
       return Stream.of(new Tile<T>(map, originX, originY));
   }
 
   @Override
-  public void forEach(Consumer<? super Tile<T>> action) {
-    for (Tile<T> tile : toArray())
-      action.accept(tile);
+  public Iterator<Tile<T>> iterator() {
+    return new RadiusIterator();
   }
 
   public Tile<T>[] toArray() {
-    final Tile[] tiles = new Tile[1 + 3 * radius * radius + 3 * radius];
+    Tile[] tiles = new Tile[1 + 3 * radius * radius + 3 * radius];
 
     int i = 0;
     for (int row = -radius; row <= radius; ++row) {
       for (int col = Math.max(-radius, -row - radius);
            col <= Math.min(radius, -row + radius);
            ++col) {
-        tiles[i++] = new Tile<>(map, row, col);
+        if (allOnMap || layout.contains(row, col))
+          tiles[i++] = new Tile<>(map, row, col);
       }
+    }
+
+    if (i < tiles.length) {
+      // Some tiles were off the map
+      Tile[] newTiles = new Tile[i];
+      System.arraycopy(tiles, 0, newTiles, 0, newTiles.length);
+      tiles = newTiles;
     }
 
     //noinspection unchecked
@@ -49,30 +58,39 @@ final class RadiusSelector<T> implements Tiles<T> {
   }
 
   private final TileMap<T> map;
+  private final MapLayout layout;
   private final int originX;
   private final int originY;
   private final int radius;
+  private final boolean allOnMap;
 
 
-  private final class RadiusSpliterator extends Spliterators.AbstractSpliterator<Tile<T>> {
-    private RadiusSpliterator() {
-      super(Long.MAX_VALUE, 0);
+  private final class RadiusIterator implements Iterator<Tile<T>> {
+    private RadiusIterator() {
       row = -radius;
       row_max = radius;
       resetColumn();
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super Tile<T>> action) {
-      Objects.requireNonNull(action);
+    public boolean hasNext() {
+      return row < row_max || col <= col_max;
+    }
 
+    @Override
+    public Tile<T> next() {
       if (col > col_max) {
         if (++row > row_max)
-          return false;
+          throw new NoSuchElementException();
         resetColumn();
       }
-      action.accept(new Tile<>(map, originX + row, originY + col++));
-      return true;
+      final int x = originX + row;
+      final int y = originY + col++;
+
+      if (!allOnMap && !layout.contains(x, y))
+        return next();
+
+      return new Tile<>(map, x, y);
     }
 
     private void resetColumn() {

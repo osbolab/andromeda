@@ -9,13 +9,15 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class TileMapTest {
+
   @Test
   public void selectRing() {
     final int[] xs = { 1, 2, 2, 1, 0, 0 };
     final int[] ys = { 0, 0, 1, 2, 2, 1 };
 
-    TileMap<Object> map = new TileMap<>(new HexMapLayout(7));
+    TileMap<Object> map = TileMap.allocate(HexMapLayout.withDiameter(7));
     List<Tile<Object>> tiles = map.select
         .ring(1, -1, 1)
         .stream()
@@ -33,13 +35,13 @@ public class TileMapTest {
 
     for (int i = 0; i < 2; ++i) {
       Tile<Object>[] tileArray = map.select.ring(0, 0, i).toArray();
-      assertEquals(6*i, tileArray.length);
+      assertEquals(6 * i, tileArray.length);
     }
   }
 
   @Test
   public void selectRadius() {
-    TileMap<Object> map = new TileMap<>(new HexMapLayout(7));
+    TileMap<Object> map = TileMap.allocate(HexMapLayout.withDiameter(7));
     List<Object> tiles = map.select
         .radius(0, 0, 1)
         .stream()
@@ -68,12 +70,13 @@ public class TileMapTest {
 
   @Test
   public void setAndGetSelection() {
-    TileMap<Object> map = new TileMap<>(new HexMapLayout(9));
+    TileMap<Object> map = TileMap.allocate(HexMapLayout.withDiameter(9));
 
     Set<Object> values = new HashSet<>();
 
     map.select
         .radius(0, 0, 1)
+        .stream()
         .forEach(tile -> {
           Object o = new Object();
           tile.set(o);
@@ -100,7 +103,7 @@ public class TileMapTest {
 
   @Test
   public void setAndGetTiles() {
-    TileMap<Object> map = new TileMap<>(new HexMapLayout(9));
+    TileMap<Object> map = TileMap.allocate(HexMapLayout.withDiameter(9));
     for (int x = -2; x <= 2; ++x) {
       for (int y = -2; y <= 2; ++y) {
         final Object o = new Object();
