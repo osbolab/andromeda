@@ -1,34 +1,35 @@
 package com.andromeda.map;
 
-public class Tile<C> {
-  public enum Orientation {
-    Flat,
-    Pointy
-  }
-
-  public Tile(int x, int y, C child) {
+public final class Tile<T> {
+  Tile(TileMap<T> map, int x, int y) {
+    this.map = map;
     this.x = x;
     this.y = y;
-    this.child = child;
+    index = map.getLayout().indexOf(x, y);
   }
 
-  public Tile(int x, int y) {
-    this(x, y, null);
+  public boolean exists() {
+    return map.get(index) != null;
   }
 
-  public C get() {
-    return child;
+  public T get() {
+    return map.get(index);
   }
 
-  public void set(C child) {
-    this.child = child;
+  public T set(T contents) {
+    return map.set(index, contents);
   }
 
-  public int computeZ() {
-    return -(x + y);
+  public T remove() {
+    return map.remove(index);
   }
 
-  public final int x;  // col
-  public final int y;  // row
-  private C child;
+  public Tile<T> getNeighbor(int direction) {
+    return map.at(x, y, direction);
+  }
+
+  private final TileMap<T> map;
+  public final int x;
+  public final int y;
+  private final int index;
 }

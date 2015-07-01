@@ -5,13 +5,11 @@ public interface MapLayout {
 
   int getMaxEdgeLength();
 
-  /**
-   * Get the index in (-max, max) of the specified tile position.
-   */
+  boolean contains(int x, int y);
+
+  /** Get the index in (-max, max) of the specified axial position. */
   int indexOf(int x, int y);
 
-  /**
-   * Get the (x, y) position of the tile with the given index in (-max, max).
-   */
-  AxialCoord positionOf(int index);
+  /** Get the axial position of the tile with the given index in (-max, max). */
+  Coord2 positionOf(int index);
 }

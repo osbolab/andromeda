@@ -1,7 +1,17 @@
 package com.andromeda.map;
 
-public class AxialCoord {
-  public AxialCoord(int x, int y) {
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+
+public class Coord2 {
+  public static int getDistance(int x1, int y1, int x2, int y2) {
+    return max(
+        max(abs(x1 - x2), abs(y1 - y2)),
+        abs((-x1 - y1) - (-x2 - y2))
+    );
+  }
+
+  public Coord2(int x, int y) {
     this.x = x;
     this.y = y;
   }
@@ -11,7 +21,7 @@ public class AxialCoord {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    AxialCoord that = (AxialCoord) o;
+    Coord2 that = (Coord2) o;
     return x == that.x && y == that.y;
   }
 
