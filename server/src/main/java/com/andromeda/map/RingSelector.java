@@ -1,7 +1,6 @@
 package com.andromeda.map;
 
 import java.util.Objects;
-import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -32,8 +31,8 @@ final class RingSelector<T> implements Tiles<T> {
 
   @Override
   public void forEach(Consumer<? super Tile<T>> action) {
-    final Spliterator<Tile<T>> spliterator = new RingSpliterator();
-    do { } while(spliterator.tryAdvance(action));
+    for (Tile<T> tile : toArray())
+      action.accept(tile);
   }
 
   @Override
