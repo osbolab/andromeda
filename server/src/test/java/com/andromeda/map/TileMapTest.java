@@ -30,12 +30,17 @@ public class TileMapTest {
       assertEquals(xs[i], tile.x);
       assertEquals(ys[i], tile.y);
     }
+
+    for (int i = 0; i < 2; ++i) {
+      Tile<Object>[] tileArray = map.select.ring(0, 0, i).toArray();
+      assertEquals(6*i, tileArray.length);
+    }
   }
 
   @Test
   public void selectRadius() {
-    TileMap<Integer> map = new TileMap<>(new HexMapLayout(7));
-    List<Integer> tiles = map.select
+    TileMap<Object> map = new TileMap<>(new HexMapLayout(7));
+    List<Object> tiles = map.select
         .radius(0, 0, 1)
         .stream()
         .map(Tile::get)
@@ -56,6 +61,9 @@ public class TileMapTest {
         .map(Tile::get)
         .collect(Collectors.toList());
     assertEquals(0, tiles.size());
+
+    Tile<Object>[] tileArray = map.select.radius(0, 0, 2).toArray();
+    assertEquals(19, tileArray.length);
   }
 
   @Test

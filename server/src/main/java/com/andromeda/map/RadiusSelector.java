@@ -20,7 +20,10 @@ final class RadiusSelector<T> implements Tiles<T> {
 
   @Override
   public Stream<Tile<T>> stream() {
-    return StreamSupport.stream(new RadiusSpliterator(), false);
+    if (radius > 0)
+      return StreamSupport.stream(new RadiusSpliterator(), false);
+    else
+      return Stream.of(new Tile<T>(map, originX, originY));
   }
 
   @Override
