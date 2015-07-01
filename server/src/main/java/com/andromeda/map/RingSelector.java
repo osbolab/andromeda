@@ -1,7 +1,6 @@
 package com.andromeda.map;
 
 import java.util.Objects;
-import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -16,6 +15,10 @@ final class RingSelector<T> implements Tiles<T> {
     originY = x;
     originX = x;
     this.radius = radius;
+
+    final Coord2 scaleDir = Direction.coords[Direction.N];
+    startTile = map.at(originX + radius * scaleDir.x,
+                       originY + radius * scaleDir.y);
   }
 
   @Override
@@ -28,25 +31,36 @@ final class RingSelector<T> implements Tiles<T> {
 
   @Override
   public void forEach(Consumer<? super Tile<T>> action) {
-    Spliterator<Tile<T>> spliterator = new RingSpliterator();
-    do { } while (spliterator.tryAdvance(action));
+    for (Tile<T> tile : toArray())
+      action.accept(tile);
+  }
+
+  @Override
+  public Tile<T>[] toArray() {
+    final Tile[] tiles = new Tile[radius * 6];
+
+    Tile<T> tile = startTile;
+    int i = 0;
+    for (int direction = 0; direction < 6; ++direction) {
+      for (int step = 0; step < radius; ++step) {
+        tiles[i++] = tile;
+        tile = tile.getNeighbor(direction);
+      }
+    }
+    //noinspection unchecked
+    return tiles;
   }
 
   private final TileMap<T> map;
   private final int originX;
   private final int originY;
   private final int radius;
+  private final Tile<T> startTile;
 
 
   private final class RingSpliterator extends Spliterators.AbstractSpliterator<Tile<T>> {
     private RingSpliterator() {
       super(Long.MAX_VALUE, 0);
-
-      final Coord2 scaleDir = Direction.coords[Direction.N];
-      tile = map.at(originX + radius * scaleDir.x,
-                    originY + radius * scaleDir.y);
-      direction = 0;
-      step = 0;
     }
 
     @Override
@@ -67,8 +81,8 @@ final class RingSelector<T> implements Tiles<T> {
       return true;
     }
 
-    private int direction;
-    private int step;
-    private Tile<T> tile;
+    private int direction = 0;
+    private int step = 0;
+    private Tile<T> tile = startTile;
   }
 }

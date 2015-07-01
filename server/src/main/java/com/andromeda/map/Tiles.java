@@ -7,4 +7,6 @@ public interface Tiles<T> {
   Stream<Tile<T>> stream();
 
   void forEach(Consumer<? super Tile<T>> action);
+
+  Tile<T>[] toArray();
 }

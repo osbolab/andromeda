@@ -1,7 +1,6 @@
 package com.andromeda.map;
 
 import java.util.Objects;
-import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -26,8 +25,24 @@ final class RadiusSelector<T> implements Tiles<T> {
 
   @Override
   public void forEach(Consumer<? super Tile<T>> action) {
-    Spliterator<Tile<T>> spliterator = new RadiusSpliterator();
-    do { } while (spliterator.tryAdvance(action));
+    for (Tile<T> tile : toArray())
+      action.accept(tile);
+  }
+
+  public Tile<T>[] toArray() {
+    final Tile[] tiles = new Tile[1 + 3 * radius * radius + 3 * radius];
+
+    int i = 0;
+    for (int row = -radius; row <= radius; ++row) {
+      for (int col = Math.max(-radius, -row - radius);
+           col <= Math.min(radius, -row + radius);
+           ++col) {
+        tiles[i++] = new Tile<>(map, row, col);
+      }
+    }
+
+    //noinspection unchecked
+    return tiles;
   }
 
   private final TileMap<T> map;
@@ -55,7 +70,6 @@ final class RadiusSelector<T> implements Tiles<T> {
         resetColumn();
       }
 
-      assert (map.getLayout().contains(originX + row, originY + col));
       action.accept(new Tile<>(map, originX + row, originY + col++));
 
       return true;
