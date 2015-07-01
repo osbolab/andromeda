@@ -1,31 +1,24 @@
 package com.andromeda.map;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.lang.Math.round;
+
 public class HexagonalMapLayout implements MapLayout {
-  public HexagonalMapLayout(int radius) {
-    if (radius <= 0)
-      throw new IllegalArgumentException("Map radius must be positive");
-    if (radius % 2 == 0)
-      throw new IllegalArgumentException("Hexagonal map radius must be odd");
+  public HexagonalMapLayout(int diameter) {
+    if (diameter <= 0)
+      throw new IllegalArgumentException("Map diameter must be positive");
+    if ((diameter & 1) == 0)
+      throw new IllegalArgumentException("Hexagonal map diameter must be odd");
 
-    this.radius = radius;
-    radiusInv = 1.0 / radius;
-
-    // Iteratively inscribe a triangle with one vertex rooted in the corner,
-    // the hypotenuse along the radius, and the adjacent edge growing along the
-    // edge of the tessellation.
-    // The tessellation's edge length is equal to that of the equilateral triangle.
-    int edge = 0;
-    int hyp = radius;
-    // Integrate the hypotenuse to find the number of tiles in half of the tessellation,
-    // including the radius.
-    int area = 0;
-    while (edge <= hyp) {
-      area += hyp--;
-      ++edge;
-    }
-    maxEdgeLength = edge;
-    // Reflect over the radius, but don't count it twice.
-    maxTileCount = area * 2 - radius;
+    this.diameter = diameter;
+    // Cache for repeated divisions
+    diameterInv = 1.0f / diameter;
+    radius = round(diameter / 2.0f);
+    // The edge length is equal to the radius including the center tile.
+    maxEdgeLength = radius;
+    // Sum the perimeters of the hexes with radii 1..R and add the center tile.
+    maxTileCount = 1 + 3 * radius * radius - 3 * radius;
   }
 
   @Override
@@ -39,21 +32,30 @@ public class HexagonalMapLayout implements MapLayout {
   }
 
   @Override
-  public int indexOf(int x, int y) {
-    return (y * radius) + x;
-    // For positive indices only:
-    // return (radius + y) * (radius + x + Math.min(0, y));
+  public boolean contains(int x, int y) {
+    return max(abs(x), abs(y)) < radius
+           && abs(-x - y) < radius;
   }
 
   @Override
-  public AxialCoord positionOf(int index) {
-    final int y = (int) Math.round(index * radiusInv);
-    final int x = index - y * radius;
-    return new AxialCoord(x, y);
+  public int indexOf(int x, int y) {
+    assert contains(x, y);
+    return (y * diameter) + x;
+    // For positive indices only:
+    // return (diameter + y) * (diameter + x + Math.min(0, y));
+  }
+
+  @Override
+  public Coord2 positionOf(int index) {
+    final int y = round(index * diameterInv);
+    final int x = index - y * diameter;
+    assert contains(x, y);
+    return new Coord2(x, y);
   }
 
   private final int radius;
-  private final double radiusInv;
+  private final int diameter;
+  private final float diameterInv;
   private final int maxTileCount;
   private final int maxEdgeLength;
 }
