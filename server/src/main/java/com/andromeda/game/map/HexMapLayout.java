@@ -4,12 +4,15 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
 
+
 public final class HexMapLayout implements MapLayout {
-  public HexMapLayout(int diameter) {
-    if (diameter <= 0)
-      throw new IllegalArgumentException("Map diameter must be positive");
-    if ((diameter & 1) == 0)
-      throw new IllegalArgumentException("Hexagonal map diameter must be odd");
+  public static HexMapLayout withDiameter(int diameter) {
+    return new HexMapLayout(diameter);
+  }
+
+  private HexMapLayout(int diameter) {
+    assert diameter > 0 : "Map diameter must be positive";
+    assert (diameter & 1) != 0 : "Hexagonal map diameter must be odd";
 
     this.diameter = diameter;
     // Cache for frequent divisions
@@ -38,8 +41,16 @@ public final class HexMapLayout implements MapLayout {
   }
 
   @Override
+  public boolean containsRadius(int x, int y, int radius) {
+    assert radius >= 0 : "Radius can't be negative";
+    return (radius = this.radius - radius) >= 0
+           && max(abs(x), abs(y)) <= radius
+           && abs(-x - y) <= radius;
+  }
+
+  @Override
   public int indexOf(int x, int y) {
-    assert contains(x, y);
+    assert contains(x, y) : "Tile position is not in map";
     return (y * diameter) + x;
     // For positive indices only:
     // return (diameter + y) * (diameter + x + Math.min(0, y));
@@ -49,7 +60,7 @@ public final class HexMapLayout implements MapLayout {
   public Coord2 positionOf(int index) {
     final int y = round(index * diameterInv);
     final int x = index - y * diameter;
-    assert contains(x, y);
+    assert contains(x, y) : "Position of tile for index is not in map";
     return new Coord2(x, y);
   }
 

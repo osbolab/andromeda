@@ -1,6 +1,7 @@
 package com.andromeda.game.procedural;
 
 final class XorshiftRng extends java.util.Random implements Rng {
+
   public XorshiftRng(long seed) {
     setSeed(seed);
   }
@@ -18,7 +19,7 @@ final class XorshiftRng extends java.util.Random implements Rng {
 
   @Override
   public int nextInt(int min, int bound) {
-    return min + nextInt(bound-min);
+    return min + nextInt(bound - min);
   }
 
   @Override
@@ -28,7 +29,7 @@ final class XorshiftRng extends java.util.Random implements Rng {
 
   @Override
   public double nextDouble(double min, double bound) {
-    return min + nextDouble(bound-min);
+    return min + nextDouble(bound - min);
   }
 
   @Override
@@ -38,7 +39,7 @@ final class XorshiftRng extends java.util.Random implements Rng {
 
   @Override
   public float nextFloat(float min, float bound) {
-    return min + nextFloat(bound-min);
+    return min + nextFloat(bound - min);
   }
 
   @Override

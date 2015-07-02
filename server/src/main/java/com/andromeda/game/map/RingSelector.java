@@ -1,52 +1,53 @@
 package com.andromeda.game.map;
 
-import java.util.Objects;
-import java.util.Spliterators;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 
 final class RingSelector<T> implements Tiles<T> {
+
   public RingSelector(TileMap<T> map, int x, int y, int radius) {
     assert radius >= 0;
-    assert map.getLayout().contains(x, y);
+    assert map.contains(x, y);
 
     this.map = map;
-    originY = x;
     originX = x;
+    originY = y;
     this.radius = radius;
 
     final Coord2 scaleDir = Direction.coords[Direction.N];
-    startTile = map.at(originX + radius * scaleDir.x,
-                       originY + radius * scaleDir.y);
+    startTile = VirtualTile.at(originX + radius * scaleDir.x,
+                               originY + radius * scaleDir.y);
+
+    allOnMap = map.containsRadius(startTile.x, startTile.y, radius);
   }
 
   @Override
-  public Stream<Tile<T>> stream() {
-    if (radius > 0)
-      return StreamSupport.stream(new RingSpliterator(), false);
-    else
-      return Stream.of(map.at(originX, originY));
-  }
-
-  @Override
-  public void forEach(Consumer<? super Tile<T>> action) {
-    for (Tile<T> tile : toArray())
-      action.accept(tile);
+  public Iterator<Tile<T>> iterator() {
+    return new RingIterator();
   }
 
   @Override
   public Tile<T>[] toArray() {
-    final Tile[] tiles = new Tile[radius * 6];
+    Tile[] tiles = new Tile[radius * 6];
 
-    Tile<T> tile = startTile;
+    VirtualTile<T> tile = startTile;
     int i = 0;
     for (int direction = 0; direction < 6; ++direction) {
       for (int step = 0; step < radius; ++step) {
-        tiles[i++] = tile;
-        tile = tile.getNeighbor(direction);
+        if (allOnMap || map.contains(tile.x, tile.y))
+          tiles[i++] = tile.realize(map);
+        tile = tile.neighbor(direction);
       }
     }
+
+    if (i < tiles.length) {
+      // Some tiles were off the map
+      Tile[] newTiles = new Tile[i];
+      System.arraycopy(tiles, 0, newTiles, 0, newTiles.length);
+      tiles = newTiles;
+    }
+
     //noinspection unchecked
     return tiles;
   }
@@ -55,34 +56,50 @@ final class RingSelector<T> implements Tiles<T> {
   private final int originX;
   private final int originY;
   private final int radius;
-  private final Tile<T> startTile;
+  private final VirtualTile<T> startTile;
+  private final boolean allOnMap;
 
 
-  private final class RingSpliterator extends Spliterators.AbstractSpliterator<Tile<T>> {
-    private RingSpliterator() {
-      super(Long.MAX_VALUE, 0);
+  private final class RingIterator implements Iterator<Tile<T>> {
+    private RingIterator() {
+      // Find the first tile on the map
+      if (!allOnMap && !map.contains(nextTile.x, nextTile.y))
+        moveNext();
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super Tile<T>> action) {
-      Objects.requireNonNull(action);
+    public boolean hasNext() {
+      return nextTile != null;
+    }
 
-      // Walk along the edge, turn at the corner, and walk until we reach the beginning.
-      if (step++ == radius) {
-        if (++direction == 6)
-          return false;
-        // Don't count the same corner twice
-        step = 1;
-      }
+    @Override
+    public Tile<T> next() {
+      if (!hasNext())
+        throw new NoSuchElementException();
 
-      action.accept(tile);
-      tile = tile.getNeighbor(direction);
+      final Tile<T> tile = nextTile.realize(map);
+      moveNext();
+      return tile;
+    }
 
-      return true;
+    private void moveNext() {
+      do {
+        // Walk along the edge, turn at the corner, and walk until we reach the beginning.
+        if (step++ == radius) {
+          if ((direction = (direction + 1) % 6) == 5) {
+            nextTile = null;
+            return;
+          }
+          // Don't count the same corner twice
+          step = 1;
+        }
+        nextTile = nextTile.neighbor(direction);
+        // Skip tiles that aren't on the map
+      } while (!allOnMap && !map.contains(nextTile.x, nextTile.y));
     }
 
     private int direction = 0;
     private int step = 0;
-    private Tile<T> tile = startTile;
+    private VirtualTile<T> nextTile = startTile;
   }
 }

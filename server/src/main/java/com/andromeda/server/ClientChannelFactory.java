@@ -9,7 +9,9 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
+
 class ClientChannelFactory extends ChannelInitializer<SocketChannel> {
+
   @Override
   protected void initChannel(SocketChannel ch) throws Exception {
     ch.pipeline()

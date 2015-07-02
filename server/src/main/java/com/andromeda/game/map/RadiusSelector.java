@@ -2,30 +2,18 @@ package com.andromeda.game.map;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 
 final class RadiusSelector<T> implements Tiles<T> {
   RadiusSelector(TileMap<T> map, int x, int y, int radius) {
-    this.map = map;
-    layout = map.getLayout();
-
     assert radius >= 0;
-    assert layout.contains(x, y);
+    assert map.contains(x, y);
 
+    this.map = map;
+    allOnMap = map.containsRadius(x, y, radius);
     originX = x;
     originY = y;
     this.radius = radius;
-    allOnMap = layout.containsRadius(x, y, radius);
-  }
-
-  @Override
-  public Stream<Tile<T>> stream() {
-    if (radius > 0)
-      return StreamSupport.stream(spliterator(), false);
-    else
-      return Stream.of(new Tile<T>(map, originX, originY));
   }
 
   @Override
@@ -41,7 +29,7 @@ final class RadiusSelector<T> implements Tiles<T> {
       for (int col = Math.max(-radius, -row - radius);
            col <= Math.min(radius, -row + radius);
            ++col) {
-        if (allOnMap || layout.contains(row, col))
+        if (allOnMap || map.contains(row, col))
           tiles[i++] = new Tile<>(map, row, col);
       }
     }
@@ -58,7 +46,6 @@ final class RadiusSelector<T> implements Tiles<T> {
   }
 
   private final TileMap<T> map;
-  private final MapLayout layout;
   private final int originX;
   private final int originY;
   private final int radius;
@@ -87,7 +74,7 @@ final class RadiusSelector<T> implements Tiles<T> {
       final int x = originX + row;
       final int y = originY + col++;
 
-      if (!allOnMap && !layout.contains(x, y))
+      if (!allOnMap && !map.contains(x, y))
         return next();
 
       return new Tile<>(map, x, y);

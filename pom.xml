@@ -72,6 +72,13 @@
         <artifactId>protobuf-java</artifactId>
         <version>${protobuf.version}</version>
       </dependency>
+
+      <!-- Math (e.g. floating point comparison) -->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-math3</artifactId>
+        <version>3.5</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

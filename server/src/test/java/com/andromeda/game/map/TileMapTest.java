@@ -13,17 +13,15 @@ import static org.junit.Assert.assertEquals;
 public class TileMapTest {
 
   @Test
-  public void selectRing() {
+  public void selectRingAsStream() {
     final int[] xs = { 1, 2, 2, 1, 0, 0 };
-    final int[] ys = { 0, 0, 1, 2, 2, 1 };
+    final int[] ys = { -2, -2, -1, 0, 0, -1 };
 
     TileMap<Object> map = TileMap.allocate(HexMapLayout.withDiameter(7));
     List<Tile<Object>> tiles = map.select
         .ring(1, -1, 1)
         .stream()
         .collect(Collectors.toList());
-
-    map.neighbor(0, 0, 1);
 
     assertEquals(6, tiles.size());
 
@@ -32,10 +30,34 @@ public class TileMapTest {
       assertEquals(xs[i], tile.x);
       assertEquals(ys[i], tile.y);
     }
+  }
 
+  @Test
+  public void selectRingAsArray() {
+    TileMap<Object> map = TileMap.allocate(HexMapLayout.withDiameter(7));
     for (int i = 0; i < 2; ++i) {
       Tile<Object>[] tileArray = map.select.ring(0, 0, i).toArray();
       assertEquals(6 * i, tileArray.length);
+    }
+  }
+
+  @Test
+  public void selectOffMapRing() {
+    final int[] xs = { 2, 1, 0, 0 };
+    final int[] ys = { -2, -1, -1, -2 };
+
+    TileMap<Object> map = TileMap.allocate(HexMapLayout.withDiameter(5));
+    List<Tile<Object>> tiles = map.select
+        .ring(1, -2, 1)
+        .stream()
+        .collect(Collectors.toList());
+
+    assertEquals(4, tiles.size());
+
+    for (int i = 0; i < tiles.size(); ++i) {
+      final Tile<Object> tile = tiles.get(i);
+      assertEquals(xs[i], tile.x);
+      assertEquals(ys[i], tile.y);
     }
   }
 
@@ -107,9 +129,9 @@ public class TileMapTest {
     for (int x = -2; x <= 2; ++x) {
       for (int y = -2; y <= 2; ++y) {
         final Object o = new Object();
-        map.at(x, y).set(o);
+        map.select.at(x, y).set(o);
 
-        final Tile<Object> tile = map.at(x, y);
+        final Tile<Object> tile = map.select.at(x, y);
         assertEquals(x, tile.x);
         assertEquals(y, tile.y);
         assertEquals(o, tile.get());

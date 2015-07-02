@@ -5,7 +5,7 @@ public final class Tile<T> {
     this.map = map;
     this.x = x;
     this.y = y;
-    index = map.getLayout().indexOf(x, y);
+    index = map.indexOf(x, y);
   }
 
   public boolean exists() {
@@ -24,8 +24,16 @@ public final class Tile<T> {
     return map.remove(index);
   }
 
-  public Tile<T> getNeighbor(int direction) {
-    return map.neighbor(x, y, direction);
+  public Tile<T> neighbor(int direction) {
+    return map.select.neighbor(x, y, direction);
+  }
+
+  public Tiles<T> neighbors(int radius) {
+    return map.select.radius(x, y, radius);
+  }
+
+  public long getSeed() {
+    return ((long) x << 32) + y;
   }
 
   @Override
@@ -44,6 +52,10 @@ public final class Tile<T> {
   @Override
   public int hashCode() {
     return 31 * map.hashCode() + index;
+  }
+
+  public int distanceTo(Tile<T> tile) {
+    return Coord2.getDistance(x, y, tile.x, tile.y);
   }
 
   private final TileMap<T> map;

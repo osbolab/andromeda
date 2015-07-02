@@ -3,7 +3,9 @@ package com.andromeda.game.map;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
+
 public final class Coord2 {
+
   public static int getDistance(int x1, int y1, int x2, int y2) {
     return max(
         max(abs(x1 - x2), abs(y1 - y2)),

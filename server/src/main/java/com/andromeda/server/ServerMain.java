@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 
+
 public class ServerMain {
+
   public static void main(String[] args) throws Exception {
     try {
       Server.configure(

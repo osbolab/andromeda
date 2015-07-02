@@ -4,7 +4,9 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+
 public interface Rng {
+
   Rng clone();
 
   void setSeed(long seed);

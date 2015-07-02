@@ -9,7 +9,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.ssl.SslHandler;
 
+
 final class ClientChannelWorker extends SimpleChannelInboundHandler<TestMessage> {
+
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
     SslHandler sslCtx = ctx.pipeline().get(SslHandler.class);

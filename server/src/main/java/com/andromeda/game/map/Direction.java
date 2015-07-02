@@ -1,6 +1,7 @@
 package com.andromeda.game.map;
 
 public final class Direction {
+
   public static final int SW = 0;
   public static final int S = 1;
   public static final int SE = 2;
