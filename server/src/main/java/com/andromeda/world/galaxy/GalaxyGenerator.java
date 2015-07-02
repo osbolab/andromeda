@@ -3,6 +3,7 @@ package com.andromeda.world.galaxy;
 import com.andromeda.game.map.MapGenerator;
 import com.andromeda.game.map.Tile;
 import com.andromeda.game.map.TileMap;
+import com.andromeda.game.map.TileRequest;
 
 
 final class GalaxyGenerator implements MapGenerator<GalaxyTile> {
@@ -21,9 +22,15 @@ final class GalaxyGenerator implements MapGenerator<GalaxyTile> {
       return tile;
 
     tile.promoteToLayer(layer);
+    return tile;
   }
 
-  private static final LayerGen[] layerGen = { new Layer0Gen(), new Layer1Gen() };
+  @Override
+  public <R extends TileRequest> void getDependencyTree(R request) {
+
+  }
+
+  private static final LayerGen[] layerGen = { new Gen0() };
 
   private final TileMap<GalaxyTile> map;
   private final long galaxySeed;

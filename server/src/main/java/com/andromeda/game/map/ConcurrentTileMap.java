@@ -92,7 +92,6 @@ public final class ConcurrentTileMap<T> implements TileMap<T> {
      * {@param direction} must be an index into {@link Coord2#directions}.
      */
     public Tile<T> neighbor(int x, int y, int direction) {
-      assert direction < Coord2.directions.length : "Direction index out of bounds";
       final Coord2 dir = Coord2.directions[direction];
       return at(x + dir.x, y + dir.y);
     }
