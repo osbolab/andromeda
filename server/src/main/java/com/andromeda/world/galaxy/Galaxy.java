@@ -6,7 +6,6 @@ import com.typesafe.config.Config;
 
 
 public class Galaxy {
-
   public static Galaxy configure(final Config conf) {
     return new Galaxy(conf.getLong("seed"), conf.getInt("diameter"));
   }
@@ -14,6 +13,14 @@ public class Galaxy {
   private Galaxy(long seed, int diameter) {
     this.seed = seed;
     map = TileMap.allocate(HexMapLayout.withDiameter(diameter));
+  }
+
+  long getSeed() {
+    return seed;
+  }
+
+  TileMap<GalaxyTile> getMap() {
+    return map;
   }
 
   private final long seed;
