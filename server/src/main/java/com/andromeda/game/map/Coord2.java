@@ -5,6 +5,20 @@ import static java.lang.Math.max;
 
 
 public final class Coord2 {
+  public static final int SW = 0;
+  public static final int S = 1;
+  public static final int SE = 2;
+  public static final int NW = 3;
+  public static final int N = 4;
+  public static final int NE = 5;
+  public static final Coord2[] directions = new Coord2[]{
+      new Coord2(1, 0),
+      new Coord2(0, 1),
+      new Coord2(-1, 1),
+      new Coord2(-1, 0),
+      new Coord2(0, -1),
+      new Coord2(1, -1)
+  };
 
   public static int getDistance(int x1, int y1, int x2, int y2) {
     return max(

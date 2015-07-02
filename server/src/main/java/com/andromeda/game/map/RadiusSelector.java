@@ -3,9 +3,12 @@ package com.andromeda.game.map;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 
 final class RadiusSelector<T> implements Tiles<T> {
-  RadiusSelector(TileMap<T> map, int x, int y, int radius) {
+  RadiusSelector(ConcurrentTileMap<T> map, int x, int y, int radius) {
     assert radius >= 0;
     assert map.contains(x, y);
 
@@ -26,8 +29,8 @@ final class RadiusSelector<T> implements Tiles<T> {
 
     int i = 0;
     for (int row = -radius; row <= radius; ++row) {
-      for (int col = Math.max(-radius, -row - radius);
-           col <= Math.min(radius, -row + radius);
+      for (int col = max(-radius, -row - radius);
+           col <= min(radius, -row + radius);
            ++col) {
         if (allOnMap || map.contains(row, col))
           tiles[i++] = new Tile<>(map, row, col);
@@ -81,8 +84,8 @@ final class RadiusSelector<T> implements Tiles<T> {
     }
 
     private void resetColumn() {
-      col = Math.max(-radius, -row - radius);
-      col_max = Math.min(radius, -row + radius);
+      col = max(-radius, -row - radius);
+      col_max = min(radius, -row + radius);
     }
 
     private int row;

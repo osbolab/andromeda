@@ -19,17 +19,6 @@ public class HexMapLayoutTest {
   }
 
   @Test
-  public void computeEdgeLength() {
-    int[] diameters = new int[]{ 1, 3, 5, 7 };
-    int[] lengths = new int[]{ 1, 2, 3, 4 };
-
-    for (int i = 0; i < diameters.length; ++i) {
-      MapLayout layout = HexMapLayout.withDiameter(diameters[i]);
-      assertEquals(lengths[i], layout.getMaxEdgeLength());
-    }
-  }
-
-  @Test
   public void computeTileIndex() {
     int[] xs = new int[]{ 0, 1, 2, 3, -1, -2, -3, 1, 2, 3, -1, -2, -3 };
     int[] ys = new int[]{ 0, 0, 0, 0, 0, 0, 0, -1, -2, -3, 1, 2, 3 };
@@ -37,7 +26,7 @@ public class HexMapLayoutTest {
 
     MapLayout layout = HexMapLayout.withDiameter(7);
     for (int i = 0; i < xs.length; ++i)
-      assertEquals(is[i], layout.indexOf(xs[i], ys[i]));
+      assertEquals(is[i], layout.toKey(xs[i], ys[i]));
   }
 
   @Test
@@ -48,6 +37,6 @@ public class HexMapLayoutTest {
 
     MapLayout layout = HexMapLayout.withDiameter(7);
     for (int i = 0; i < xs.length; ++i)
-      assertEquals(new Coord2(xs[i], ys[i]), layout.positionOf(is[i]));
+      assertEquals(new Coord2(xs[i], ys[i]), layout.toCoord(is[i]));
   }
 }

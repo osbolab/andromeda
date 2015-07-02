@@ -19,6 +19,12 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
+    <!-- Utility (e.g. ListenableFuture) -->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+
     <!-- Config -->
     <dependency>
       <groupId>com.typesafe</groupId>

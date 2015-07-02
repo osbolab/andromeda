@@ -52,6 +52,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Utility (e.g. ListenableFuture) -->
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>18.0</version>
+      </dependency>
+
       <!-- HOCON Configuration -->
       <dependency>
         <groupId>com.typesafe</groupId>

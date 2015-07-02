@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 final class RingSelector<T> implements Tiles<T> {
 
-  public RingSelector(TileMap<T> map, int x, int y, int radius) {
+  public RingSelector(ConcurrentTileMap<T> map, int x, int y, int radius) {
     assert radius >= 0;
     assert map.contains(x, y);
 
@@ -15,9 +15,9 @@ final class RingSelector<T> implements Tiles<T> {
     originY = y;
     this.radius = radius;
 
-    final Coord2 scaleDir = Direction.coords[Direction.N];
-    startTile = VirtualTile.at(originX + radius * scaleDir.x,
-                               originY + radius * scaleDir.y);
+    final Coord2 scaleDir = Coord2.directions[Coord2.N];
+    startTile = new VirtualTile<>(originX + radius * scaleDir.x,
+                                  originY + radius * scaleDir.y);
 
     allOnMap = map.containsRadius(startTile.x, startTile.y, radius);
   }
@@ -52,7 +52,7 @@ final class RingSelector<T> implements Tiles<T> {
     return tiles;
   }
 
-  private final TileMap<T> map;
+  private final ConcurrentTileMap<T> map;
   private final int originX;
   private final int originY;
   private final int radius;
