@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.world.map;
 
 /**
  * A virtual tile doesn't exist on a particular map; instead it behaves as if existing on an

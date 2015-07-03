@@ -1,4 +1,4 @@
-package com.andromeda.game.procedural;
+package com.andromeda.procedural;
 
 public final class Rngs {
 

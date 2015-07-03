@@ -1,5 +1,7 @@
 package com.andromeda.game.oldmap;
 
+import com.andromeda.world.map.Tiles;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

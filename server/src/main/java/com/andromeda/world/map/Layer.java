@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.world.map;
 
 import javax.annotation.concurrent.NotThreadSafe;
 

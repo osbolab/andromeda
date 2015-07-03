@@ -1,4 +1,4 @@
-package com.andromeda.world;
+package com.andromeda.world.chem;
 
 public class Element {
 

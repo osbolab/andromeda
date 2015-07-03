@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.world.map;
 
 import java.util.ArrayList;
 import java.util.List;

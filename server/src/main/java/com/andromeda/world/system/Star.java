@@ -1,6 +1,6 @@
 package com.andromeda.world.system;
 
-import com.andromeda.world.Element;
+import com.andromeda.world.chem.Element;
 
 import org.apache.commons.math3.util.Precision;
 
@@ -16,7 +16,6 @@ import org.apache.commons.math3.util.Precision;
  * with heavier core compositions.
  */
 public class Star {
-
   private Star(int age, int mass, Element[] composition, float[] compositionProps) {
     assert composition.length == compositionProps.length;
     assert sumsToOne(compositionProps) : "Star composition proportions must sum to 1";

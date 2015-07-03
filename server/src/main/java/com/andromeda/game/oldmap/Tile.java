@@ -1,5 +1,8 @@
 package com.andromeda.game.oldmap;
 
+import com.andromeda.world.map.Tiles;
+
+
 /**
  * References a specific real tile in a particular map.
  * <p>

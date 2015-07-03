@@ -1,4 +1,4 @@
-package com.andromeda.game.procedural;
+package com.andromeda.procedural;
 
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;

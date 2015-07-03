@@ -1,4 +1,4 @@
-package com.andromeda.game.procedural;
+package com.andromeda.procedural;
 
 final class XorshiftRng extends java.util.Random implements Rng {
 

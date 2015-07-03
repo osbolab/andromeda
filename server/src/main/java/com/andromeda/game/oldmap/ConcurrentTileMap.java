@@ -1,5 +1,7 @@
 package com.andromeda.game.oldmap;
 
+import com.andromeda.world.map.Tiles;
+
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

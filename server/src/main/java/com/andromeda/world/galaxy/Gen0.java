@@ -2,15 +2,15 @@ package com.andromeda.world.galaxy;
 
 import com.andromeda.game.oldmap.Tile;
 import com.andromeda.game.oldmap.TileMap;
-import com.andromeda.game.procedural.Rng;
-import com.andromeda.game.procedural.Rngs;
+import com.andromeda.procedural.Rng;
+import com.andromeda.procedural.Rngs;
 import com.typesafe.config.Config;
 
 
 /**
  * Generates a galaxy at LoD 0: Black Holes
  */
-public final class Gen0 implements LayerGen {
+public final class Gen0 {
   public static Gen0 configure(Config galaxyConf) {
     final Config conf = galaxyConf.getConfig("layer0");
     return new Gen0(
@@ -53,16 +53,6 @@ public final class Gen0 implements LayerGen {
         tile.set(new GalaxyTile(0, null));
       }
     }
-  }
-
-  @Override
-  public int getLayer() {
-    return 0;
-  }
-
-  @Override
-  public Layer generate(int x, int y) {
-    return null;
   }
 
   private final double probability;
