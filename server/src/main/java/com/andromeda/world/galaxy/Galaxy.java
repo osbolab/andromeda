@@ -1,7 +1,6 @@
 package com.andromeda.world.galaxy;
 
-import com.andromeda.game.map.HexMapLayout;
-import com.andromeda.game.map.ConcurrentTileMap;
+import com.andromeda.game.oldmap.ConcurrentTileMap;
 import com.typesafe.config.Config;
 
 
@@ -12,7 +11,7 @@ public class Galaxy {
 
   private Galaxy(long seed, int diameter) {
     this.seed = seed;
-    map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(diameter));
+    map = null;//ConcurrentTileMap.allocate(HexMapLayout.withDiameter(diameter));
   }
 
   long getSeed() {

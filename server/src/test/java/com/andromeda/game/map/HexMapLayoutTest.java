@@ -1,12 +1,13 @@
 package com.andromeda.game.map;
 
+import com.andromeda.game.oldmap.Coord2;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class HexMapLayoutTest {
-
   @Test
   public void computeTileCount() {
     int[] diameters = new int[]{ 1, 3, 5, 7 };

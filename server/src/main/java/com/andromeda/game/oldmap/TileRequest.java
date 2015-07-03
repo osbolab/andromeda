@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.game.oldmap;
 
 public abstract class TileRequest {
   protected TileRequest(int layer) {

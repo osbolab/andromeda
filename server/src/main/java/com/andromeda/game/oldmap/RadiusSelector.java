@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.game.oldmap;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.game.oldmap;
 
 public interface TileSelectors<T> {
   Tile<T> at(int x, int y);

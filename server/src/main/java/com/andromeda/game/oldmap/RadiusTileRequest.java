@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.game.oldmap;
 
 /**
  * A request for the set of tiles, at a particular layer, in a radius around a point.

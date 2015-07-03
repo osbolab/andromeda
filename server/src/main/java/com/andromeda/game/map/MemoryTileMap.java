@@ -1,11 +1,11 @@
-package com.andromeda.game.newmap;
+package com.andromeda.game.map;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 
-final class TileCache implements TileMap {
-  private TileCache(MapLayout layout) {
+final class MemoryTileMap implements TileMap {
+  private MemoryTileMap(MapLayout layout) {
     this.layout = layout;
     map = new ConcurrentHashMap<>(layout.getMaxTileCount(), 1.0f);
   }

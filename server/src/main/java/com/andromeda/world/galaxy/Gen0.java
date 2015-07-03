@@ -1,7 +1,7 @@
 package com.andromeda.world.galaxy;
 
-import com.andromeda.game.map.Tile;
-import com.andromeda.game.map.TileMap;
+import com.andromeda.game.oldmap.Tile;
+import com.andromeda.game.oldmap.TileMap;
 import com.andromeda.game.procedural.Rng;
 import com.andromeda.game.procedural.Rngs;
 import com.typesafe.config.Config;

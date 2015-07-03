@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.game.oldmap;
 
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class ConcurrentTileMapTest {
     final int[] xs = { 1, 2, 2, 1, 0, 0 };
     final int[] ys = { -2, -2, -1, 0, 0, -1 };
 
-    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(7));
+    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate("test", HexMapLayout.withDiameter(7));
     List<Tile<Object>> tiles = map.tiles()
         .onRing(1, -1, 1)
         .stream()
@@ -34,7 +34,7 @@ public class ConcurrentTileMapTest {
 
   @Test
   public void selectRingAsArray() {
-    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(7));
+    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate("test", HexMapLayout.withDiameter(7));
     for (int i = 0; i < 2; ++i) {
       Tile<Object>[] tileArray = map.tiles().onRing(0, 0, i).toArray();
       assertEquals(6 * i, tileArray.length);
@@ -46,7 +46,7 @@ public class ConcurrentTileMapTest {
     final int[] xs = { 2, 1, 0, 0 };
     final int[] ys = { -2, -1, -1, -2 };
 
-    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(5));
+    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate("test", HexMapLayout.withDiameter(5));
     List<Tile<Object>> tiles = map.tiles()
         .onRing(1, -2, 1)
         .stream()
@@ -63,7 +63,7 @@ public class ConcurrentTileMapTest {
 
   @Test
   public void selectRadius() {
-    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(7));
+    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate("test", HexMapLayout.withDiameter(7));
     List<Object> tiles = map.tiles()
         .inRadius(0, 0, 1)
         .stream()
@@ -92,7 +92,7 @@ public class ConcurrentTileMapTest {
 
   @Test
   public void setAndGetSelection() {
-    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(9));
+    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate("test", HexMapLayout.withDiameter(9));
 
     Set<Object> values = new HashSet<>();
 
@@ -125,7 +125,7 @@ public class ConcurrentTileMapTest {
 
   @Test
   public void setAndGetTiles() {
-    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(9));
+    ConcurrentTileMap<Object> map = ConcurrentTileMap.allocate("test", HexMapLayout.withDiameter(9));
     for (int x = -2; x <= 2; ++x) {
       for (int y = -2; y <= 2; ++y) {
         final Object o = new Object();

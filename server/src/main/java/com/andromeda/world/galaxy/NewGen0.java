@@ -1,7 +1,7 @@
 package com.andromeda.world.galaxy;
 
-import com.andromeda.game.map.Coord2;
-import com.andromeda.game.map.RadiusTileRequest;
+import com.andromeda.game.oldmap.Coord2;
+import com.andromeda.game.oldmap.RadiusTileRequest;
 
 
 final class NewGen0 implements LayerGen {

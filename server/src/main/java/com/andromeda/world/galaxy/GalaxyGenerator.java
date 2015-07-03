@@ -1,9 +1,9 @@
 package com.andromeda.world.galaxy;
 
-import com.andromeda.game.map.MapGenerator;
-import com.andromeda.game.map.Tile;
-import com.andromeda.game.map.TileMap;
-import com.andromeda.game.map.TileRequest;
+import com.andromeda.game.oldmap.MapGenerator;
+import com.andromeda.game.oldmap.Tile;
+import com.andromeda.game.oldmap.TileMap;
+import com.andromeda.game.oldmap.TileRequest;
 
 
 final class GalaxyGenerator implements MapGenerator<GalaxyTile> {

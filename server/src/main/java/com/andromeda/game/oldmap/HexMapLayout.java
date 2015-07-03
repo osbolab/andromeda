@@ -1,6 +1,4 @@
-package com.andromeda.game.newmap;
-
-import com.andromeda.game.map.Coord2;
+package com.andromeda.game.oldmap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +23,8 @@ public final class HexMapLayout implements MapLayout {
   }
 
   private HexMapLayout(int diameter) {
-    assert diameter > 0 : "map diameter must be positive";
-    assert (diameter & 1) != 0 : "hexagonal map diameter must be odd";
+    assert diameter > 0 : "Map diameter must be positive";
+    assert (diameter & 1) != 0 : "Hexagonal map diameter must be odd";
 
     this.diameter = diameter;
     // Cache for frequent divisions
@@ -35,27 +33,10 @@ public final class HexMapLayout implements MapLayout {
     // Sum the perimeters of the hexes with radii 1..R and add the center tile.
     maxTileCount = 1 + 3 * radius * radius + 3 * radius;
 
-    if (log.isDebugEnabled())
-      log.debug("%s(diameter = %d, maxTileCount = %d)",
-                getClass().getSimpleName(),
-                diameter,
-                maxTileCount);
-  }
-
-  @Override
-  public int toKey(int x, int y) {
-    assert contains(x, y) : "coordinate does not map to layout";
-    return (y * diameter) + x;
-    // For positive indices only:
-    // return (diameter + y) * (diameter + x + Math.min(0, y));
-  }
-
-  @Override
-  public Coord2 toCoord(int key) {
-    final int y = round(key * diameterInv);
-    final int x = key - y * diameter;
-    assert contains(x, y) : "key does not map to layout";
-    return new Coord2(x, y);
+    log.debug("%s(diameter = %d, maxTileCount = %d)",
+              getClass().getSimpleName(),
+              diameter,
+              maxTileCount);
   }
 
   @Override
@@ -71,10 +52,26 @@ public final class HexMapLayout implements MapLayout {
 
   @Override
   public boolean containsRadius(int x, int y, int radius) {
-    assert radius >= 0 : "radius can't be negative";
+    assert radius >= 0 : "Radius can't be negative";
     return (radius = this.radius - radius) >= 0
            && max(abs(x), abs(y)) <= radius
            && abs(-x - y) <= radius;
+  }
+
+  @Override
+  public int toKey(int x, int y) {
+    assert contains(x, y) : "given coordinate is not in map";
+    return (y * diameter) + x;
+    // For positive indices only:
+    // return (diameter + y) * (diameter + x + Math.min(0, y));
+  }
+
+  @Override
+  public Coord2 toCoord(int key) {
+    final int y = round(key * diameterInv);
+    final int x = key - y * diameter;
+    assert contains(x, y) : "coordinate for given key is not in 2D map space";
+    return new Coord2(x, y);
   }
 
   private final int radius;

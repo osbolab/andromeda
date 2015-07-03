@@ -1,4 +1,4 @@
-package com.andromeda.game.map;
+package com.andromeda.game.oldmap;
 
 public final class SingleTileRequest extends TileRequest {
   public SingleTileRequest(int x, int y, int layer) {
