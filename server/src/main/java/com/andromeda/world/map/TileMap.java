@@ -2,11 +2,9 @@ package com.andromeda.world.map;
 
 
 public interface TileMap {
-  int toKey(int x, int y);
+  MapLayout getLayout();
 
-  TileData get(int key);
-
-  default TileSelectors select(int layer) {
-    return null;
-  }
+  TileSelector inRadius(int x, int y, int radius);
+  //TileSelector onRing(int x, int y, int radius);
+  //TileSelector onRing(int x, int y, int r1, int r2);
 }
