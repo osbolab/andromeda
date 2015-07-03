@@ -43,7 +43,7 @@ public final class HexMapLayout implements MapLayout {
   }
 
   @Override
-  public int toKey(int x, int y) {
+  public int getTileKey(int x, int y) {
     assert contains(x, y) : "coordinate does not map to layout";
     return (y * diameter) + x;
     // For positive indices only:
@@ -59,7 +59,7 @@ public final class HexMapLayout implements MapLayout {
   }
 
   @Override
-  public int getMaxTileCount() {
+  public int getTileCapacity() {
     return maxTileCount;
   }
 

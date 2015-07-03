@@ -2,11 +2,10 @@ package com.andromeda.game.galaxy;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
-import com.andromeda.world.map.FutureTiles;
-import com.andromeda.world.map.Tile;
-import com.andromeda.world.map.Tiles;
 import com.andromeda.world.galaxy.Galaxy;
+import com.andromeda.world.map.Tiles;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -15,16 +14,15 @@ import org.junit.Test;
 
 public final class GalaxyTest {
   @Test
-  public void demonstrateUsage() {
+  public void getLayer1Async() {
     Galaxy gal = Galaxy.configure(galConf);
 
-    FutureTiles loading = gal.map().select(Galaxy.Layer.Systems).inRadius(0, 0, 1);
-    // hasNext() blocks until true or finished
-    for (Tile tile : loading) {
-    }
+    Tiles tiles = gal.getTiles().inRadius(0, 0, 1).now();
 
-    // Block until available
-    // Tiles tiles = loading.get();
+    ListenableFuture<Tiles> loading = gal.getTiles()
+        .inRadius(0, 0, 1)              // Doesn't have to be entirely contained by the map space
+        .require(Galaxy.Layer.Systems)  // Require that the tiles be generated to this layer
+        .later();                       // Do the selection and generation in the background
 
     // Wait for all tiles to be available
     Futures.addCallback(loading, new FutureCallback<Tiles>() {

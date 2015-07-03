@@ -13,7 +13,7 @@ import javax.annotation.concurrent.ThreadSafe;
 @ThreadSafe
 public interface MapLayout {
   /** Get the unique key for the tile at the specified coordinate. */
-  int toKey(int x, int y);
+  int getTileKey(int x, int y);
 
   /**
    * Project the tile key from the interval {@code (-j, k)} to exactly one {@code (x, y)} pair.
@@ -25,7 +25,7 @@ public interface MapLayout {
    * <p>
    * The capacity is necessarily limited to support mapping tile coordinates to keys.
    */
-  int getMaxTileCount();
+  int getTileCapacity();
 
   /** Return {@code true} if the given coordinate is in this layout. */
   boolean contains(int x, int y);

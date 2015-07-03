@@ -1,7 +1,8 @@
 package com.andromeda.world.galaxy;
 
+import com.andromeda.world.map.AutoMapLoader;
+import com.andromeda.world.map.ConcurrentTileMap;
 import com.andromeda.world.map.HexMapLayout;
-import com.andromeda.world.map.MemoryTileMap;
 import com.andromeda.world.map.TileMap;
 import com.typesafe.config.Config;
 
@@ -18,13 +19,15 @@ public class Galaxy {
 
   private Galaxy(long seed, int diameter) {
     this.seed = seed;
-    map = MemoryTileMap.allocate(HexMapLayout.withDiameter(diameter));
+    map = ConcurrentTileMap.allocate(HexMapLayout.withDiameter(diameter)).setName("Galaxy");
+    mapLoader = new AutoMapLoader(map);
   }
 
-  public TileMap map() {
-    return map;
+  public TileMap getTiles() {
+    return mapLoader;
   }
 
   private final long seed;
   private final TileMap map;
+  private final AutoMapLoader mapLoader;
 }

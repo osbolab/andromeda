@@ -1,33 +1,19 @@
 package com.andromeda.world.map;
 
+import com.andromeda.procedural.SeedsRng;
 
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.Nullable;
 
 
-/** A proxy to the tile at a given coordinate in a specific tile map. */
-@NotThreadSafe
-public final class Tile extends VirtualTile {
-  Tile(int x, int y, TileMap map) {
-    super(x, y);
-    this.map = map;
-    key = map.toKey(x, y);
-  }
+public interface Tile extends SeedsRng {
+  int getX();
+  int getY();
 
-  public Object set(int layer, Object newData) {
-    if (layers == null) initData();
-    return layers.set(layer, newData);
-  }
+  @Nullable
+  Object get(int layer);
+  @Nullable
+  Object set(int layer, @Nullable Object newData);
 
-  public Object get(int layer) {
-    if (layers == null) initData();
-    return layers.get(layer);
-  }
-
-  private void initData() {
-    layers = map.get(key);
-  }
-
-  final int key;
-  transient private final TileMap map;
-  transient private TileData layers;
+  @Nullable
+  Tile getNeighbor(int direction);
 }

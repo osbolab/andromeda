@@ -15,7 +15,7 @@ public class HexMapLayoutTest {
 
     for (int i = 0; i < diameters.length; ++i) {
       MapLayout layout = HexMapLayout.withDiameter(diameters[i]);
-      assertEquals(lengths[i], layout.getMaxTileCount());
+      assertEquals(lengths[i], layout.getTileCapacity());
     }
   }
 
@@ -27,7 +27,7 @@ public class HexMapLayoutTest {
 
     MapLayout layout = HexMapLayout.withDiameter(7);
     for (int i = 0; i < xs.length; ++i)
-      assertEquals(is[i], layout.toKey(xs[i], ys[i]));
+      assertEquals(is[i], layout.getTileKey(xs[i], ys[i]));
   }
 
   @Test
