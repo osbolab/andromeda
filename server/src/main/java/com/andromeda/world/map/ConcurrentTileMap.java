@@ -3,11 +3,10 @@ package com.andromeda.world.map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 
-public final class ConcurrentTileMap implements TileMap, TileDataCache {
+public final class ConcurrentTileMap implements TileMap {
   public static ConcurrentTileMap allocate(HexMapLayout layout) {
     return new ConcurrentTileMap(layout, new ConcurrentHashMap<>(layout.getTileCapacity(), 1.0f));
   }
@@ -30,17 +29,6 @@ public final class ConcurrentTileMap implements TileMap, TileDataCache {
   @Override
   public TileSelector inRadius(int x, int y, int radius) {
     return null;
-  }
-
-  @Override
-  @Nullable
-  public TileData get(int key) {
-    return data.get(key);
-  }
-
-  @Override
-  public TileData getOrInit(int key) {
-    return data.computeIfAbsent(key, k -> new TileData());
   }
 
   public ConcurrentTileMap setName(String name) {
@@ -87,7 +75,8 @@ public final class ConcurrentTileMap implements TileMap, TileDataCache {
 
     @Override
     public Object set(int layer, Object newData) {
-      return getOrInit(key).set(layer, newData);
+      return data.computeIfAbsent(key, k -> new TileData())
+          .set(layer, newData);
     }
 
     @Override
