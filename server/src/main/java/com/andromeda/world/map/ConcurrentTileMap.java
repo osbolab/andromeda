@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 
 
 public final class ConcurrentTileMap implements TileMap, TileDataCache {
@@ -60,8 +60,8 @@ public final class ConcurrentTileMap implements TileMap, TileDataCache {
   private final ConcurrentMap<Integer, TileData> data;
 
 
-  /** Represents the tile at a given coordinate on a specific map. */
-  @NotThreadSafe
+  /** Implementation of {@link Tile} that directly mutates this map. */
+  @ThreadSafe
   private final class TileImpl implements Tile {
     TileImpl(int x, int y) {
       this.x = x;
@@ -91,12 +91,9 @@ public final class ConcurrentTileMap implements TileMap, TileDataCache {
     }
 
     @Override
-    @Nullable
     public Tile getNeighbor(int direction) {
       final Coord dir = Coord.directions[direction];
-      final int xx = x + dir.x;
-      final int yy = y + dir.y;
-      return layout.contains(xx, yy) ? new TileImpl(xx, yy) : null;
+      return new TileImpl(x + dir.x, y + dir.y);
     }
 
     @Override

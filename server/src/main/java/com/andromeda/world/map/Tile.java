@@ -3,8 +3,11 @@ package com.andromeda.world.map;
 import com.andromeda.procedural.SeedsRng;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 
+/** Represents the tile at a given coordinate on a specific map. */
+@ThreadSafe
 public interface Tile extends SeedsRng {
   int getX();
   int getY();
@@ -14,6 +17,6 @@ public interface Tile extends SeedsRng {
   @Nullable
   Object set(int layer, @Nullable Object newData);
 
-  @Nullable
+  /** Does not check that the given neighbor is actually on the map. */
   Tile getNeighbor(int direction);
 }

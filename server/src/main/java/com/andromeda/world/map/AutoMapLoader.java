@@ -11,6 +11,11 @@ public class AutoMapLoader implements TileMap {
   }
 
   @Override
+  public Tile getTile(int x, int y) {
+    return null;
+  }
+
+  @Override
   public TileSelector inRadius(int x, int y, int radius) {
     return null;
   }
