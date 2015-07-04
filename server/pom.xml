@@ -37,13 +37,6 @@
       <artifactId>netty-all</artifactId>
     </dependency>
 
-    <!-- MongoDB -->
-    <dependency>
-      <groupId>org.mongodb</groupId>
-      <artifactId>mongodb-driver</artifactId>
-      <version>3.0.2</version>
-    </dependency>
-
     <!-- Math (e.g. floating point comparison) -->
     <dependency>
       <groupId>org.apache.commons</groupId>
