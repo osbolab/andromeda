@@ -37,6 +37,13 @@
       <artifactId>netty-all</artifactId>
     </dependency>
 
+    <!-- Database -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.4-1201-jdbc41</version>
+    </dependency>
+
     <!-- Math (e.g. floating point comparison) -->
     <dependency>
       <groupId>org.apache.commons</groupId>
